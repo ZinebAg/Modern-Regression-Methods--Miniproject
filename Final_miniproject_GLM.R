@@ -23,11 +23,11 @@ library(Metrics)
 library(xtable)
 library("countreg") # to install it : install.packages("countreg", repos="http://R-Forge.R-project.org")
 
-
-
-# loading the data:
+#------------------------------------------------------------------------------------
+#please load your data  here
+# loading the data: 
 load("/Users/Mac/Downloads/new_data_MRM.RData")
-
+#------------------------------------------------------------------------------------
 
 
 #aggregating some variables:
@@ -485,15 +485,18 @@ plot( fit_binomial, caption = list("Residuals vs Fitted", "Normal Q-Q",
                                    "Residuals vs Leverage",
                                    expression("Cook's dist vs Leverage  " * h[ii] / (1 - h[ii]))))
 
+
 newdata <- test_binom[,-1]
+num<-nrow(newdata)
 log_predictions <- fit_binomial %>% predict(newdata)
-predictions<- exp(log_predictions )
-zero_rows<-which(test$CNT == 0)
-rmsevalue_zero<-rmse(test$CNT[zero_rows],predictions[zero_rows])
+probabilities<-inv.logit(log_predictions)
+predictions<-rbinom( num, 1, probabilities)
+zero_rows<-which(test_binom$CNT == 0)
+rmsevalue_zero<-rmse(test_binom$CNT[zero_rows],predictions[zero_rows])
 rmsevalue_zero
 
-non_zero_rows<-which(test$CNT != 0)
-rmsevalue_non_zero<-rmse(test$CNT[non_zero_rows],predictions[non_zero_rows])
+non_zero_rows<-which(test_binom$CNT != 0)
+rmsevalue_non_zero<-rmse(test_binom$CNT[non_zero_rows],predictions[non_zero_rows])
 rmsevalue_non_zero
 
 AICvalue<-AIC(fit_binomial)
@@ -516,14 +519,17 @@ plot( fit_binomial_interaction, caption = list("Residuals vs Fitted", "Normal Q-
                                                expression("Cook's dist vs Leverage  " * h[ii] / (1 - h[ii]))))
 
 newdata <- test_binom[,-1]
+num<-nrow(newdata)
 log_predictions <- fit_binomial_interaction %>% predict(newdata)
-predictions<- exp(log_predictions )
-zero_rows<-which(test$CNT == 0)
-rmsevalue_zero<-rmse(test$CNT[zero_rows],predictions[zero_rows])
+probabilities<-inv.logit(log_predictions)
+#predictions<- log_predictions 
+predictions<-rbinom( num, 1, probabilities)
+zero_rows<-which(test_binom$CNT == 0)
+rmsevalue_zero<-rmse(test_binom$CNT[zero_rows],predictions[zero_rows])
 rmsevalue_zero
 
-non_zero_rows<-which(test$CNT != 0)
-rmsevalue_non_zero<-rmse(test$CNT[non_zero_rows],predictions[non_zero_rows])
+non_zero_rows<-which(test_binom$CNT != 0)
+rmsevalue_non_zero<-rmse(test_binom$CNT[non_zero_rows],predictions[non_zero_rows])
 rmsevalue_non_zero
 
 AICvalue<-AIC(fit_binomial_interaction)
@@ -581,15 +587,20 @@ plot( final_fit_binomial_interaction, caption = list("Residuals vs Fitted", "Nor
                                                      "Scale-Location", "Cook's distance",
                                                      "Residuals vs Leverage",
                                                      expression("Cook's dist vs Leverage  " * h[ii] / (1 - h[ii]))))
+
+
+
+
 newdata <- test_binom[,-1]
 log_predictions <- final_fit_binomial_interaction %>% predict(newdata)
-predictions<- exp(log_predictions )
-zero_rows<-which(test$CNT == 0)
-rmsevalue_zero<-rmse(test$CNT[zero_rows],predictions[zero_rows])
+probabilities<-inv.logit(log_predictions)
+predictions<-rbinom( num, 1, probabilities) 
+zero_rows<-which(test_binom$CNT == 0)
+rmsevalue_zero<-rmse(test_binom$CNT[zero_rows],predictions[zero_rows])
 rmsevalue_zero
 
-non_zero_rows<-which(test$CNT != 0)
-rmsevalue_non_zero<-rmse(test$CNT[non_zero_rows],predictions[non_zero_rows])
+non_zero_rows<-which(test_binom$CNT != 0)
+rmsevalue_non_zero<-rmse(test_binom$CNT[non_zero_rows],predictions[non_zero_rows])
 rmsevalue_non_zero
 
 AICvalue<-AIC(final_fit_binomial_interaction)
@@ -879,4 +890,3 @@ code_latex<-print(mt,type = getOption("xtable.type", "latex"),table.placement = 
                   caption.width = getOption("xtable.caption.width", NULL),
                   latex.environments = getOption("xtable.latex.environments", c("center")),
                   tabular.environment = getOption("xtable.tabular.environment", "tabular"))
-
