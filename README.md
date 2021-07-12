@@ -26,3 +26,5 @@ Files:
   -   GAM_Analysis-of-models.html: exported R Jupyter notebook
   -   GAM_Analysis-of-models.R: R script without output
 - GAM_predictions.R: predictions for missing (NA) values in the dataset using GAM with Quasipoisson
+- GLM.R: all the GLM analysis
+- List_of_models: list of chosen models using GLM analysis
